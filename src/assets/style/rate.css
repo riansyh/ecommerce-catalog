@@ -1,0 +1,26 @@
+.rate {
+    display: flex;
+    gap: 2px;
+}
+
+.rate .item {
+    width: 18px;
+    height: 18px;
+    border-radius: 100%;
+    background-color: var(--primary);
+    border: 2px solid var(--primary);
+}
+
+.rate .unfilled-item {
+    width: 18px;
+    height: 18px;
+    border-radius: 100%;
+    border: 2px solid var(--primary);
+}
+
+.rate-container .category {
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 22px;
+    color: var(--gray);
+}
