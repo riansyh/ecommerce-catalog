@@ -41,7 +41,6 @@
             </section>
 
             <EmptyState @onNext="incrementCount" v-if="!state.isLoading && !state.category" />
-
             <LoadingComponent v-if="state.isLoading" />
         </div>
 </main>
