@@ -1,4 +1,6 @@
-<template><ProductDisplay /></template>
+<template>
+  <ProductDisplay />
+</template>
 
 <script>
 import ProductDisplay from './components/ProductDisplay.vue'

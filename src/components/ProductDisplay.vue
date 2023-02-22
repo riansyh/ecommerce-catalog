@@ -1,3 +1,49 @@
+<script setup>
+import './../assets/style/page.css'
+import './../assets/style/rate.css'
+import { onMounted, reactive } from 'vue';
+import EmptyState from './EmptyState.vue'
+import LoadingComponent from './LoadingComponent.vue'
+
+const state = reactive({
+    index: 1,
+    isLoading: true,
+    category: null,
+    data: {},
+});
+
+async function fetchData() {
+    state.isLoading = true;
+    try {
+        const response = await fetch(`https://fakestoreapi.com/products/${state.index}`);
+        const data = await response.json();
+        state.data = data;
+        if (['women\'s clothing', 'men\'s clothing'].includes(state.data.category)) {
+            state.category = state.data.category
+        } else {
+            state.category = null
+        }
+    } catch (error) {
+        console.log(error);
+    }
+    state.isLoading = false;
+}
+
+function incrementCount() {
+    if (state.index < 20) {
+        state.index++;
+    } else if (state.index === 20) {
+        state.index = 1
+    }
+    fetchData()
+}
+
+onMounted(() => {
+    fetchData();
+})
+
+</script>
+
 <template>
     <main :class="state.category ? state.category === 'men\'s clothing' ? 'man' : 'woman' : 'empty'">
         <div class="background">
@@ -43,70 +89,5 @@
             <EmptyState @onNext="incrementCount" v-if="!state.isLoading && !state.category" />
             <LoadingComponent v-if="state.isLoading" />
         </div>
-</main>
+    </main>
 </template>
-
-<script>
-import './../assets/style/page.css'
-import './../assets/style/rate.css'
-import { reactive } from 'vue';
-import EmptyState from './EmptyState.vue'
-import LoadingComponent from './LoadingComponent.vue'
-
-export default {
-    name: "ProductDisplay",
-    setup() {
-        const state = reactive({
-            index: 1,
-            isLoading: true,
-            category: null,
-            data: {},
-        });
-
-        async function fetchData() {
-            state.isLoading = true;
-            try {
-                const response = await fetch(`https://fakestoreapi.com/products/${state.index}`);
-                const data = await response.json();
-                state.data = data;
-                if (['women\'s clothing', 'men\'s clothing'].includes(state.data.category)) {
-                    state.category = state.data.category
-                } else {
-                    state.category = null
-                }
-            } catch (error) {
-                console.log(error);
-            }
-            state.isLoading = false;
-        }
-
-        return {
-            state,
-            fetchData
-        };
-    },
-    data() {
-        return {
-            isMan: false
-        }
-    },
-    methods: {
-        incrementCount() {
-            console.log(this.state)
-            if (this.state.index < 20) {
-                this.state.index++;
-            } else if (this.state.index === 20) {
-                this.state.index = 1
-            }
-            this.fetchData()
-        }
-    },
-    mounted() {
-        this.fetchData();
-    },
-    components: {
-        EmptyState,
-        LoadingComponent
-    }
-};
-</script>
